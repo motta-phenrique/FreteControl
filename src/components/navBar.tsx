@@ -8,8 +8,8 @@ export default function NavBar() {
         <Image
             src={Logo}
             alt="Logo Frete"
-            width={120}
-            height={60}
+            width={80}
+            height={50}
             quality={100}
         />
       </div>
