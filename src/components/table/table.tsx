@@ -15,9 +15,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 import { useState } from "react";
+import { Button } from "../ui/button";
+import NewExpense from "../newExpensesModal";
+import ListExpenses from "../listExpenses";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,7 +48,9 @@ export function DataTable<TData, TValue>({
 
   const [selectedRow, setSelectedRow] = useState(null);
 
+  // @ts-ignore
   const handleRowClick = (row) => {
+    // @ts-ignore
     setSelectedRow((prevRow) => (prevRow?.id === row.id ? null : row));
   };
 
@@ -48,7 +62,7 @@ export function DataTable<TData, TValue>({
             <TableRow key={headergroup.id}>
               {headergroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}> 
+                  <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -96,18 +110,52 @@ export function DataTable<TData, TValue>({
                 Informações detalhadas sobre o cliente selecionado.
               </DialogDescription>
             </DialogHeader>
+
             <div className="mt-4 space-y-2">
-              <p><strong>Cliente:</strong> {selectedRow.getValue("cliente")}</p>
-              <p><strong>Despesas:</strong> {selectedRow.getValue("despesas")}</p>
-              <p><strong>Data:</strong> {selectedRow.getValue("data")}</p>
-              <p><strong>Valor:</strong> {selectedRow.getValue("valor")}</p>
-              <p><strong>Líquido:</strong> {selectedRow.getValue("valor") - selectedRow.getValue("despesas")}</p>
+              <p>
+                <strong>Cliente:</strong> {" "} { 
+                // @ts-ignore 
+                selectedRow.getValue("cliente")
+                }
+              </p>
+              <p>
+                <strong>Total despesas:</strong>{" "}
+                {
+                // @ts-ignore
+                selectedRow.getValue("despesas")
+                }
+              </p>
+              <p>
+                <strong>Data:</strong>{" "} 
+                {
+                // @ts-ignore
+                selectedRow.getValue("data")
+                }
+              </p>
+              <p>
+                <strong>Valor:</strong>{" "}
+                {
+                // @ts-ignore
+                selectedRow.getValue("valor")
+                }
+              </p>
+              <p>
+                <strong>Líquido:</strong>{" "}
+                {
+                // @ts-ignore
+                selectedRow.getValue("valor") - selectedRow.getValue("despesas")
+                }
+              </p>
             </div>
+
+            <NewExpense />
+
+            <ListExpenses />
             <DialogFooter>
               <DialogClose asChild>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded">
+                <Button className="px-4 py-2 w-full text-white rounded">
                   Fechar
-                </button>
+                </Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>

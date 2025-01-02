@@ -1,27 +1,31 @@
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import { Button } from "./ui/button";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Field, Form, Formik } from "formik";
 import { InputNewFrete } from "./inputNewFrete";
-import { Calendar as CalendarIcon } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
-import { newFreteSchema } from "@/schemas/newFreteSchema";
-import { formatDate } from "./newExpensesModal";
+import { newExpenseSchema } from "@/schemas/newExpensesSchema";
+import { expenses } from "@/utils/expenses";
 
-export default function NewFreteModal() {
+export const formatDate = (date: Date): string => {
+  return date.toLocaleDateString('pt-BR'); // pt-BR para formato dd/mm/yyyy
+};
+
+export default function NewExpense() {
+
   const initialValues = {
-    cliente: "",
+    name: "",
     descricao: "",
     data: "",
     valor: "",
@@ -30,30 +34,34 @@ export default function NewFreteModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Novo Frete</Button>
+        <Button>Nova despesa +</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-sm rounded-lg">
+      <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-start">Criar novo frete:</DialogTitle>
+          <DialogTitle className="text-start">Criar nova despesa:</DialogTitle>
           <DialogDescription className="text-start">
-            Digite os valores para criar seu novo frete.
+            Digite os valores para criar sua nova despesa.
           </DialogDescription>
         </DialogHeader>
-
         <Formik
           initialValues={initialValues}
-          validationSchema={newFreteSchema}
-          onSubmit={(values, { setSubmitting }) => {
+          validationSchema={newExpenseSchema}
+          onSubmit={(values, { setSubmitting, resetForm }) => {
+            console.log(values)
             setTimeout(() => {
               alert(JSON.stringify(values, null, 2));
               setSubmitting(false);
+              expenses.push(values)
+              resetForm()
             }, 400);
           }}
         >
           {({ isSubmitting, values }) => (
             <Form className="flex flex-col gap-4">
-              <InputNewFrete label="Cliente" name="cliente" type="text" />
+              <InputNewFrete label="Nome da despesa" name="name" type="text" />
               <InputNewFrete label="Descrição" name="descricao" type="text" />
+              <InputNewFrete label="Valor" name="valor" type="number" />
+
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -84,8 +92,6 @@ export default function NewFreteModal() {
                   </Field>
                 </PopoverContent>
               </Popover>
-
-              <InputNewFrete label="Valor" name="valor" type="number" />
 
               <Button type="submit" disabled={isSubmitting}>
                 Criar +
