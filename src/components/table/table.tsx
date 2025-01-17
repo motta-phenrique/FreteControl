@@ -26,10 +26,11 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import NewExpense from "../newExpensesModal";
 import ListExpenses from "../listExpenses";
+import { fretes } from "./column";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -43,6 +44,11 @@ export function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    state: {
+      columnVisibility: {
+        listaDespesas: false,
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -113,44 +119,59 @@ export function DataTable<TData, TValue>({
 
             <div className="mt-4 space-y-2">
               <p>
-                <strong>Cliente:</strong> {" "} { 
-                // @ts-ignore 
-                selectedRow.getValue("cliente")
+                <strong>Cliente:</strong>{" "}
+                {
+                  // @ts-ignore
+                  selectedRow.getValue("cliente")
                 }
               </p>
               <p>
                 <strong>Total despesas:</strong>{" "}
                 {
-                // @ts-ignore
-                selectedRow.getValue("despesas")
+                  // @ts-ignore
+                  selectedRow.getValue("despesas")
                 }
               </p>
               <p>
-                <strong>Data:</strong>{" "} 
+                <strong>Data:</strong>{" "}
                 {
-                // @ts-ignore
-                selectedRow.getValue("data")
+                  // @ts-ignore
+                  selectedRow.getValue("data")
                 }
               </p>
               <p>
                 <strong>Valor:</strong>{" "}
                 {
-                // @ts-ignore
-                selectedRow.getValue("valor")
+                  // @ts-ignore
+                  selectedRow.getValue("valor")
                 }
               </p>
               <p>
                 <strong>Líquido:</strong>{" "}
                 {
-                // @ts-ignore
-                selectedRow.getValue("valor") - selectedRow.getValue("despesas")
+                  // @ts-ignore
+                  selectedRow.getValue("valor") - selectedRow.getValue("despesas")
                 }
               </p>
             </div>
 
-            <NewExpense />
+            <NewExpense
+              listaDespesas={
+                // @ts-ignore
+                selectedRow.getValue("listaDespesas")
+              }
+            />
 
-            <ListExpenses />
+            <ListExpenses
+              id={
+                // @ts-ignore
+                selectedRow.getValue("id")
+              }
+              listaDespesas={
+                // @ts-ignore
+                selectedRow.getValue("listaDespesas")
+              }
+            />
             <DialogFooter>
               <DialogClose asChild>
                 <Button className="px-4 py-2 w-full text-white rounded">

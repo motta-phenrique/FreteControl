@@ -4,6 +4,3 @@ export type expense = {
   data: Date,
   valor : number
 }
-
-
-export const expenses= []

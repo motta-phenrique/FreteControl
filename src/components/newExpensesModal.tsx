@@ -8,21 +8,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Field, Form, Formik } from "formik";
 import { InputNewFrete } from "./inputNewFrete";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
 import { newExpenseSchema } from "@/schemas/newExpensesSchema";
-import { expenses } from "@/utils/expenses";
 
 export const formatDate = (date: Date): string => {
   return date.toLocaleDateString('pt-BR'); // pt-BR para formato dd/mm/yyyy
 };
 
-export default function NewExpense() {
+interface Expense {
+  name: string,
+  descricao: string; 
+  valor: number; 
+  data: string; 
+}
+
+interface NewExpensesProps {
+  listaDespesas: Array<Expense>
+}
+
+export default function NewExpense( { listaDespesas } : NewExpensesProps) {
 
   const initialValues = {
     name: "",
@@ -51,7 +59,7 @@ export default function NewExpense() {
             setTimeout(() => {
               alert(JSON.stringify(values, null, 2));
               setSubmitting(false);
-              expenses.push(values)
+              listaDespesas.push(values)
               resetForm()
             }, 400);
           }}
